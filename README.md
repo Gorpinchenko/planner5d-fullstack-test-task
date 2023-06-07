@@ -23,3 +23,8 @@ Build frontend:
   docker-compose exec app npm install
   docker-compose exec app npm run build
 ```
+
+Import projects:
+```sh
+  docker-compose exec app php artisan app:import-projects
+```
