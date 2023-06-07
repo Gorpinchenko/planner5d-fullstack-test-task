@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Console\Commands\Projects\Extractor;
 use App\Models\Project;
+use App\Models\ProjectViews;
 use GuzzleHttp\Promise\Each;
 use Illuminate\Http\Client\Response;
 use Illuminate\Console\Command;
@@ -37,12 +38,16 @@ class ImportProjects extends Command
      */
     public function handle()
     {
-        DB::table((new Project())->getTable())->truncate();
-
         try {
             foreach (range(1, static::PAGES_NUMBER) as $page) {
                 $this->importPage($page);
             }
+
+            $projectViews = Project::all(['id as project_id'])->map->toArray()->toArray();
+            foreach($projectViews as &$item) {
+                $item['number'] = 0;
+            }
+            ProjectViews::insert($projectViews);
             return Command::SUCCESS;
         } catch (RequestException $e) {
             return Command::FAILURE;
