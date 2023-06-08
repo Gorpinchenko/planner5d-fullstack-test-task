@@ -30,3 +30,6 @@ Import projects:
 ```sh
   docker-compose exec app php artisan app:import-projects
 ```
+
+Open project:
+[localhost](http://localhost/)
