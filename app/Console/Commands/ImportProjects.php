@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Http;
 
 class ImportProjects extends Command
 {
-    private const CONCURRENCY_LIMIT = 4;
+    private const CONCURRENCY_LIMIT = 10;
     private const LIST_PROJECTS_URL = 'https://planner5d.com/gallery/floorplans';
     private const PAGES_NUMBER      = 3;
 
@@ -38,13 +38,16 @@ class ImportProjects extends Command
      */
     public function handle()
     {
+        DB::table((new ProjectViews())->getTable())->truncate();
+        DB::table((new Project())->getTable())->truncate();
+
         try {
             foreach (range(1, static::PAGES_NUMBER) as $page) {
                 $this->importPage($page);
             }
 
             $projectViews = Project::all(['id as project_id'])->map->toArray()->toArray();
-            foreach($projectViews as &$item) {
+            foreach ($projectViews as &$item) {
                 $item['number'] = 0;
             }
             ProjectViews::insert($projectViews);
@@ -70,7 +73,7 @@ class ImportProjects extends Command
                 Each::ofLimit(
                     (function () use ($pool, $projectLinks) {
                         foreach ($projectLinks as $projectLink) {
-                            $this->line('Import project: ' . $projectLink);
+                            $this->line("Import project: $projectLink");
 
                             yield $pool->async()
                                 ->get($projectLink)

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 /**
- * @property string $id
+ * @property int $id
  * @property string $title
  * @property string $canvas_link
  * @property Carbon|null $created_at

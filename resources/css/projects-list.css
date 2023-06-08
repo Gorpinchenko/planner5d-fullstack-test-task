@@ -1,0 +1,21 @@
+@import "./common/reset.css";
+
+.container {
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+.list-item {
+    padding: 5px 0;
+}
+
+.list-item-title {
+    line-height: 20px;
+    font-size: 16px;
+    color: #404040;
+    text-decoration: none;
+}
+
+.list-item-title:hover {
+    color: #20bd57;
+}
